@@ -1,14 +1,15 @@
 # -*- coding: utf-8 -*-
 
-# Define here the models for your scraped items
-#
-# See documentation in:
-# https://docs.scrapy.org/en/latest/topics/items.html
-
 import scrapy
 
 
 class HousingItem(scrapy.Item):
-    # define the fields for your item here like:
-    # name = scrapy.Field()
-    pass
+
+    date_posted = scrapy.Field()
+    description = scrapy.Field()
+    location = scrapy.Field()
+    rent = scrapy.Field()
+    season = scrapy.Field()
+    availability = scrapy.Field()
+    details = scrapy.Field()
+    contact = scrapy.Field()
