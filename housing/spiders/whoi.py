@@ -5,6 +5,7 @@ import scrapy
 def stripExtraSpace(toStrip):
     return ' '.join(toStrip.split())
 
+
 class WhoiSpider(scrapy.Spider):
     name = 'whoi'
     allowed_domains = ['www.whoi.edu']
@@ -14,7 +15,8 @@ class WhoiSpider(scrapy.Spider):
 
     def parse(self, response):
         item = {}
-        listings = response.xpath('//div[@id="cof"]/table/tr/td/form/table//tr')
+        listings = response.xpath(
+            '//div[@id="cof"]/table/tr/td/form/table//tr')
         # print(listings)
         # Ignore table header row
         for listing in listings[1:]:
@@ -27,7 +29,8 @@ class WhoiSpider(scrapy.Spider):
             item['Availability'] = listing.xpath('td[7]//text()').get()
             moreinfo = listing.xpath('td[8]//@href').get()
 
-            request = scrapy.Request(response.urljoin(moreinfo), callback=self.parse_more_info)
+            request = scrapy.Request(response.urljoin(
+                moreinfo), callback=self.parse_more_info)
             request.meta['item'] = item
 
             yield request
@@ -38,7 +41,9 @@ class WhoiSpider(scrapy.Spider):
         response = response.replace(body=response.body.replace(b'<br>', b'\n'))
         response = response.replace(body=response.body.replace(b'\r\n', b''))
 
-        item['Details'] = stripExtraSpace(response.xpath('string(//div[@id="cof"]/table/tr/td/table/tr[2]//td[2])').get())
-        item['Contact'] = stripExtraSpace(response.xpath('string(//div[@id="cof"]/table/tr/td/table/tr[2]//td[3])').get())
+        item['Details'] = stripExtraSpace(response.xpath(
+            'string(//div[@id="cof"]/table/tr/td/table/tr[2]//td[2])').get())
+        item['Contact'] = stripExtraSpace(response.xpath(
+            'string(//div[@id="cof"]/table/tr/td/table/tr[2]//td[3])').get())
 
         yield item
